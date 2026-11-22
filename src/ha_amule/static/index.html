@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>aMule</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="icon.svg" alt="" width="28" height="28">
+      <span>aMule</span>
+    </div>
+    <div class="pills" id="pills"></div>
+    <div class="speeds" id="speeds"></div>
+  </header>
+
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-tab="transfers" aria-selected="true"><span data-i18n="transfers">Transfers</span><b class="badge" id="badge-transfers" hidden></b></button>
+    <button role="tab" data-tab="search" data-i18n="search">Search</button>
+    <button role="tab" data-tab="uploads"><span data-i18n="uploads">Uploads</span><b class="badge" id="badge-uploads" hidden></b></button>
+    <button role="tab" data-tab="shared" data-i18n="shared">Shared</button>
+    <button role="tab" data-tab="network" data-i18n="network">Network</button>
+    <button role="tab" data-tab="log" data-i18n="log">Log</button>
+  </nav>
+
+  <main>
+    <div class="banner" id="banner" hidden></div>
+
+    <!-- Transfers -->
+    <section id="tab-transfers" class="tab">
+      <form class="card addlinks" id="add-form">
+        <textarea id="links" rows="1" data-i18n-placeholder="paste_links" placeholder="Paste ed2k:// links (one per line)"></textarea>
+        <button class="primary" type="submit" data-i18n="add">Add</button>
+      </form>
+      <div class="toolbar">
+        <div class="chips" id="filters">
+          <button class="chip" data-filter="all" aria-pressed="true"><span data-i18n="all">All</span> <b id="n-all">0</b></button>
+          <button class="chip" data-filter="active" aria-pressed="false"><span data-i18n="active">Active</span> <b id="n-active">0</b></button>
+          <button class="chip" data-filter="paused" aria-pressed="false"><span data-i18n="paused">Paused</span> <b id="n-paused">0</b></button>
+          <button class="chip" data-filter="completed" aria-pressed="false"><span data-i18n="completed">Completed</span> <b id="n-completed">0</b></button>
+        </div>
+        <div class="actions">
+          <input type="search" id="dl-filter" data-i18n-placeholder="filter" placeholder="Filter">
+          <button class="ghost" id="clear-completed" data-i18n="clear_completed">Clear completed</button>
+        </div>
+      </div>
+      <div class="selection" id="selection" hidden>
+        <span id="selection-count"></span>
+        <button class="ghost" data-bulk="resume" data-i18n="resume">Resume</button>
+        <button class="ghost" data-bulk="pause" data-i18n="pause">Pause</button>
+        <select id="bulk-priority" aria-label="Priority">
+          <option value="" data-i18n="priority">Priority</option>
+          <option value="auto" data-i18n="prio_auto">Auto</option>
+          <option value="high" data-i18n="prio_high">High</option>
+          <option value="normal" data-i18n="prio_normal">Normal</option>
+          <option value="low" data-i18n="prio_low">Low</option>
+        </select>
+        <button class="danger" data-bulk="cancel" data-i18n="cancel">Cancel</button>
+      </div>
+      <div class="list" id="downloads"></div>
+    </section>
+
+    <!-- Search -->
+    <section id="tab-search" class="tab" hidden>
+      <form class="card searchform" id="search-form">
+        <div class="row">
+          <input type="search" id="q" required minlength="2" maxlength="200" data-i18n-placeholder="search_placeholder" placeholder="What are you looking for?" autocomplete="off">
+          <button class="primary" type="submit" id="search-btn" data-i18n="search">Search</button>
+        </div>
+        <div class="row options">
+          <label><span data-i18n="network">Network</span>
+            <select id="scope">
+              <option value="global" data-i18n="scope_global">eD2k (all servers)</option>
+              <option value="local" data-i18n="scope_local">eD2k (current server)</option>
+              <option value="kad">Kad</option>
+            </select>
+          </label>
+          <label><span data-i18n="type">Type</span>
+            <select id="ftype">
+              <option value="" data-i18n="any">Any</option>
+              <option value="Video" data-i18n="video">Video</option>
+              <option value="Audio" data-i18n="audio">Audio</option>
+              <option value="Doc" data-i18n="documents">Documents</option>
+              <option value="Image" data-i18n="images">Images</option>
+              <option value="Arc" data-i18n="archives">Archives</option>
+              <option value="Iso" data-i18n="cd_images">CD/DVD images</option>
+              <option value="Pro" data-i18n="programs">Programs</option>
+            </select>
+          </label>
+          <label><span data-i18n="extension">Extension</span><input id="ext" maxlength="10" placeholder="mkv"></label>
+          <label><span data-i18n="min_size">Min. MB</span><input id="minsize" type="number" min="0" inputmode="numeric"></label>
+          <label><span data-i18n="max_size">Max. MB</span><input id="maxsize" type="number" min="0" inputmode="numeric"></label>
+          <label><span data-i18n="min_sources">Min. sources</span><input id="avail" type="number" min="0" inputmode="numeric"></label>
+        </div>
+      </form>
+      <div class="toolbar">
+        <div class="progress-line" id="search-progress" hidden><div></div></div>
+        <span class="muted" id="search-info"></span>
+        <div class="actions">
+          <input type="search" id="res-filter" data-i18n-placeholder="filter" placeholder="Filter">
+          <button class="ghost" id="stop-search" hidden data-i18n="stop">Stop</button>
+          <button class="primary" id="download-selected" disabled data-i18n="download_selected">Download selected</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="results" id="results">
+          <thead>
+            <tr>
+              <th class="check"><input type="checkbox" id="select-all-results" aria-label="Select all"></th>
+              <th data-sort="name" data-i18n="name">Name</th>
+              <th data-sort="size" class="num" data-i18n="size">Size</th>
+              <th data-sort="sources" class="num" data-i18n="sources">Sources</th>
+              <th data-sort="complete_sources" class="num" data-i18n="complete">Complete</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Uploads -->
+    <section id="tab-uploads" class="tab" hidden>
+      <div class="table-wrap">
+        <table id="uploads">
+          <thead><tr><th data-i18n="user">User</th><th data-i18n="file">File</th><th data-i18n="client">Client</th><th class="num" data-i18n="speed">Speed</th><th class="num" data-i18n="session">Session</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Shared -->
+    <section id="tab-shared" class="tab" hidden>
+      <div class="toolbar">
+        <span class="muted" id="shared-info"></span>
+        <div class="actions">
+          <input type="search" id="shared-filter" data-i18n-placeholder="filter" placeholder="Filter">
+          <button class="ghost" id="reload-shared" data-i18n="rescan">Rescan folders</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="shared">
+          <thead><tr><th data-i18n="name">Name</th><th class="num" data-i18n="size">Size</th><th class="num" data-i18n="requests">Requests</th><th class="num" data-i18n="uploaded">Uploaded</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Network -->
+    <section id="tab-network" class="tab" hidden>
+      <div class="grid">
+        <div class="card net" id="net-ed2k"></div>
+        <div class="card net" id="net-kad"></div>
+        <form class="card" id="limits-form">
+          <h3 data-i18n="speed_limits">Speed limits</h3>
+          <p class="muted" data-i18n="limits_hint">kB/s, 0 = unlimited. Applies until the app restarts; set it permanently in the app configuration.</p>
+          <div class="row">
+            <label><span data-i18n="download">Download</span><input id="lim-down" type="number" min="0" inputmode="numeric"></label>
+            <label><span data-i18n="upload">Upload</span><input id="lim-up" type="number" min="0" inputmode="numeric"></label>
+            <button class="primary" type="submit" data-i18n="apply">Apply</button>
+          </div>
+        </form>
+        <div class="card stats" id="net-stats"></div>
+      </div>
+      <h3 data-i18n="servers">Servers</h3>
+      <div class="table-wrap">
+        <table id="servers">
+          <thead><tr><th data-i18n="name">Name</th><th data-i18n="address">Address</th><th class="num" data-i18n="users">Users</th><th class="num" data-i18n="files">Files</th><th class="num">Ping</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Log -->
+    <section id="tab-log" class="tab" hidden>
+      <pre class="card log" id="log"></pre>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

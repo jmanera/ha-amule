@@ -1,0 +1,184 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Conecta con una app de aMule. En Home Assistant OS la app se descubre sola; usa esto solo si se ejecuta en otro sitio.",
+        "data": {
+          "host": "Host",
+          "port": "Puerto",
+          "api_key": "Clave API"
+        },
+        "data_description": {
+          "host": "Nombre o IP de la app.",
+          "api_key": "Está en la carpeta de datos de la app, en el archivo integration_key."
+        }
+      },
+      "hassio_confirm": {
+        "title": "App de aMule encontrada",
+        "description": "¿Quieres conectar Home Assistant con la app {addon}? Tendrás sensores de transferencias y red, límites de velocidad, interruptores de red, una acción para añadir enlaces ed2k y eventos al terminar las descargas."
+      },
+      "reauth_confirm": {
+        "description": "La app de aMule ha rechazado la clave API. Introduce la actual (archivo integration_key en la carpeta de datos de la app) o reinicia la app para que vuelva a anunciarse.",
+        "data": {
+          "api_key": "Clave API"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "No se pudo conectar",
+      "invalid_auth": "Clave API no válida"
+    },
+    "abort": {
+      "already_configured": "aMule ya está configurado",
+      "cannot_connect": "No se pudo conectar",
+      "invalid_auth": "Clave API no válida",
+      "reauth_successful": "Reautenticación correcta"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "ed2k_connected": {
+        "name": "Conexión eD2k"
+      },
+      "kad_connected": {
+        "name": "Conexión Kad"
+      },
+      "low_id": {
+        "name": "ID baja"
+      }
+    },
+    "button": {
+      "pause_all": {
+        "name": "Pausar todas las descargas"
+      },
+      "resume_all": {
+        "name": "Reanudar todas las descargas"
+      },
+      "clear_completed": {
+        "name": "Quitar descargas completadas"
+      }
+    },
+    "number": {
+      "download_limit": {
+        "name": "Límite de bajada"
+      },
+      "upload_limit": {
+        "name": "Límite de subida"
+      }
+    },
+    "sensor": {
+      "download_speed": {
+        "name": "Velocidad de bajada"
+      },
+      "upload_speed": {
+        "name": "Velocidad de subida"
+      },
+      "active_downloads": {
+        "name": "Descargas activas",
+        "unit_of_measurement": "descargas"
+      },
+      "queued_downloads": {
+        "name": "Descargas en cola",
+        "unit_of_measurement": "descargas"
+      },
+      "paused_downloads": {
+        "name": "Descargas en pausa",
+        "unit_of_measurement": "descargas"
+      },
+      "completed_downloads": {
+        "name": "Descargas completadas",
+        "unit_of_measurement": "descargas"
+      },
+      "failed_downloads": {
+        "name": "Descargas con error",
+        "unit_of_measurement": "descargas"
+      },
+      "total_downloads": {
+        "name": "Descargas en la lista",
+        "unit_of_measurement": "descargas"
+      },
+      "upload_queue": {
+        "name": "Cola de subida",
+        "unit_of_measurement": "clientes"
+      },
+      "shared_files": {
+        "name": "Archivos compartidos",
+        "unit_of_measurement": "archivos"
+      },
+      "sources": {
+        "name": "Fuentes",
+        "unit_of_measurement": "fuentes"
+      },
+      "session_downloaded": {
+        "name": "Descargado en esta sesión"
+      },
+      "session_uploaded": {
+        "name": "Subido en esta sesión"
+      },
+      "ed2k_status": {
+        "name": "Estado eD2k",
+        "state": {
+          "high_id": "ID alta",
+          "low_id": "ID baja",
+          "connecting": "Conectando",
+          "disconnected": "Desconectado"
+        }
+      },
+      "kad_status": {
+        "name": "Estado Kad",
+        "state": {
+          "connected": "Conectado",
+          "firewalled": "Tras cortafuegos",
+          "connecting": "Conectando",
+          "disconnected": "Desconectado"
+        }
+      },
+      "ed2k_server": {
+        "name": "Servidor eD2k"
+      },
+      "ed2k_users": {
+        "name": "Usuarios eD2k",
+        "unit_of_measurement": "usuarios"
+      },
+      "kad_users": {
+        "name": "Usuarios Kad",
+        "unit_of_measurement": "usuarios"
+      },
+      "kad_nodes": {
+        "name": "Nodos Kad",
+        "unit_of_measurement": "nodos"
+      }
+    },
+    "switch": {
+      "ed2k_network": {
+        "name": "Red eD2k"
+      },
+      "kad_network": {
+        "name": "Red Kad"
+      }
+    }
+  },
+  "services": {
+    "add_link": {
+      "name": "Añadir enlace ed2k",
+      "description": "Añade uno o varios enlaces ed2k:// a la cola de descargas.",
+      "fields": {
+        "link": {
+          "name": "Enlace",
+          "description": "Un enlace ed2k://, o varios (una lista, o uno por línea)."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "La integración de aMule no está configurada o no está en marcha."
+    },
+    "invalid_link": {
+      "message": "No es un enlace ed2k: \"{link}\""
+    },
+    "request_failed": {
+      "message": "La app de aMule no pudo completar la petición: {error}"
+    }
+  }
+}

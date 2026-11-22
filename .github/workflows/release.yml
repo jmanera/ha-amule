@@ -1,0 +1,69 @@
+# On a version tag: check every version matches it, build and push the multi-arch app image,
+# and publish a GitHub release with the changelog entry and the integration as a zip.
+# Tests, lint and type checks run locally (`make check` / pre-commit) to keep CI time minimal.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check every version matches the tag
+        id: version
+        run: |
+          version=$(grep -Po '^version: "\K[^"]+' amule/config.yaml)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          fail=0
+          check() { [ "$2" = "$version" ] || { echo "::error file=$1::version $2 != $version"; fail=1; }; }
+          check amule/Dockerfile "$(grep -Po 'io.hass.version="\K[^"]+' amule/Dockerfile)"
+          check pyproject.toml "$(grep -Po '^version = "\K[^"]+' pyproject.toml)"
+          check src/ha_amule/__init__.py "$(grep -Po '__version__ = "\K[^"]+' src/ha_amule/__init__.py)"
+          check custom_components/amule/manifest.json "$(jq -r .version custom_components/amule/manifest.json)"
+          grep -q "^## $version\$" amule/CHANGELOG.md || { echo "::error file=amule/CHANGELOG.md::no entry for $version"; fail=1; }
+          if [ "${GITHUB_REF_TYPE}" = tag ] && [ "${GITHUB_REF_NAME}" != "v$version" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} != v$version"; fail=1
+          fi
+          exit $fail
+
+      - uses: docker/setup-qemu-action@v4
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push (amd64 + arm64)
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: amule/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.ref_type == 'tag' }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/ha-amule:${{ steps.version.outputs.version }}
+            ghcr.io/${{ github.repository_owner }}/ha-amule:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Release notes and integration zip
+        if: github.ref_type == 'tag'
+        run: |
+          awk -v v="## ${{ steps.version.outputs.version }}" '$0 == v {on=1; next} /^## / {on=0} on' amule/CHANGELOG.md > notes.md
+          (cd custom_components/amule && zip -qr ../../amule.zip . -x '__pycache__/*')
+
+      - uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
+        with:
+          body_path: notes.md
+          files: amule.zip

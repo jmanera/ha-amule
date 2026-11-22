@@ -1,0 +1,42 @@
+configuration:
+  download_dir:
+    name: Download folder
+    description: Where finished downloads go. Must be under /share or /media. It is shared on the network.
+  temp_dir:
+    name: Temporary folder
+    description: Where unfinished downloads are kept. Must be under /share or /media.
+  share_dirs:
+    name: Extra shared folders
+    description: Other folders under /share or /media to share on the network.
+  nickname:
+    name: Nickname
+    description: The name other eD2k users see.
+  max_download_kbps:
+    name: Download limit (kB/s)
+    description: 0 means unlimited.
+  max_upload_kbps:
+    name: Upload limit (kB/s)
+    description: 0 means unlimited. aMule limits downloads when uploads are set very low.
+  connect_ed2k:
+    name: Connect to eD2k
+    description: Connect to eD2k servers on start.
+  connect_kad:
+    name: Connect to Kad
+    description: Connect to the serverless Kad network on start.
+  servers_url:
+    name: Server list URL
+    description: server.met to load the eD2k server list from on every start. Leave empty to keep the current list.
+  nodes_url:
+    name: Kad nodes URL
+    description: nodes.dat used to join Kad the first time.
+  remote_password:
+    name: Remote control password
+    description: Set it to control aMule from amulegui or amulecmd on port 4712 (enable that port under Network). Empty keeps remote control off.
+  log_level:
+    name: Log level
+    description: How much the app logs.
+network:
+  4662/tcp: eD2k TCP port (forward it on your router for a high ID)
+  4672/udp: eD2k and Kad UDP port (forward it on your router)
+  4665/udp: eD2k global search UDP port
+  4712/tcp: Remote control for amulegui/amulecmd (needs a remote control password)

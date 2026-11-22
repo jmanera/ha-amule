@@ -1,0 +1,42 @@
+configuration:
+  download_dir:
+    name: Carpeta de descargas
+    description: Donde se guardan las descargas terminadas. Debe estar en /share o /media. Se comparte en la red.
+  temp_dir:
+    name: Carpeta temporal
+    description: Donde se guardan las descargas sin terminar. Debe estar en /share o /media.
+  share_dirs:
+    name: Carpetas compartidas adicionales
+    description: Otras carpetas de /share o /media que compartir en la red.
+  nickname:
+    name: Apodo
+    description: El nombre que ven otros usuarios de eD2k.
+  max_download_kbps:
+    name: Límite de bajada (kB/s)
+    description: 0 significa sin límite.
+  max_upload_kbps:
+    name: Límite de subida (kB/s)
+    description: 0 significa sin límite. aMule limita la bajada si la subida es muy baja.
+  connect_ed2k:
+    name: Conectar a eD2k
+    description: Conectar a servidores eD2k al arrancar.
+  connect_kad:
+    name: Conectar a Kad
+    description: Conectar a la red Kad (sin servidores) al arrancar.
+  servers_url:
+    name: URL de la lista de servidores
+    description: server.met del que cargar la lista de servidores eD2k en cada arranque. Déjalo vacío para mantener la lista actual.
+  nodes_url:
+    name: URL de nodos Kad
+    description: nodes.dat para entrar en Kad la primera vez.
+  remote_password:
+    name: Contraseña de control remoto
+    description: Ponla para controlar aMule desde amulegui o amulecmd en el puerto 4712 (activa ese puerto en Red). Vacía deja el control remoto apagado.
+  log_level:
+    name: Nivel de registro
+    description: Cuánto registra la app.
+network:
+  4662/tcp: Puerto TCP de eD2k (ábrelo en el router para tener ID alta)
+  4672/udp: Puerto UDP de eD2k y Kad (ábrelo en el router)
+  4665/udp: Puerto UDP de búsqueda global de eD2k
+  4712/tcp: Control remoto para amulegui/amulecmd (requiere contraseña de control remoto)

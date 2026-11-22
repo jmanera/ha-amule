@@ -1,0 +1,16 @@
+.git
+.venv
+.data
+dist
+**/__pycache__
+.pytest_cache
+.mypy_cache
+.ruff_cache
+htmlcov
+coverage.xml
+tests
+integration_tests
+custom_components
+docs
+scripts
+.claude

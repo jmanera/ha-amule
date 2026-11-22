@@ -1,0 +1,184 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Connect to an aMule app. On Home Assistant OS the app is discovered automatically; use this only if it runs elsewhere.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "api_key": "API key"
+        },
+        "data_description": {
+          "host": "Hostname or IP address of the app.",
+          "api_key": "Found in the app's data folder, in the file integration_key."
+        }
+      },
+      "hassio_confirm": {
+        "title": "aMule app found",
+        "description": "Do you want to connect Home Assistant to the {addon} app? You get transfer and network sensors, speed limits, network switches, an action to add ed2k links and events when downloads finish."
+      },
+      "reauth_confirm": {
+        "description": "The aMule app rejected the API key. Enter the current one (file integration_key in the app's data folder), or restart the app so it announces itself again.",
+        "data": {
+          "api_key": "API key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid API key"
+    },
+    "abort": {
+      "already_configured": "aMule is already configured",
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid API key",
+      "reauth_successful": "Re-authentication was successful"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "ed2k_connected": {
+        "name": "eD2k connection"
+      },
+      "kad_connected": {
+        "name": "Kad connection"
+      },
+      "low_id": {
+        "name": "Low ID"
+      }
+    },
+    "button": {
+      "pause_all": {
+        "name": "Pause all downloads"
+      },
+      "resume_all": {
+        "name": "Resume all downloads"
+      },
+      "clear_completed": {
+        "name": "Clear completed downloads"
+      }
+    },
+    "number": {
+      "download_limit": {
+        "name": "Download limit"
+      },
+      "upload_limit": {
+        "name": "Upload limit"
+      }
+    },
+    "sensor": {
+      "download_speed": {
+        "name": "Download speed"
+      },
+      "upload_speed": {
+        "name": "Upload speed"
+      },
+      "active_downloads": {
+        "name": "Active downloads",
+        "unit_of_measurement": "downloads"
+      },
+      "queued_downloads": {
+        "name": "Queued downloads",
+        "unit_of_measurement": "downloads"
+      },
+      "paused_downloads": {
+        "name": "Paused downloads",
+        "unit_of_measurement": "downloads"
+      },
+      "completed_downloads": {
+        "name": "Completed downloads",
+        "unit_of_measurement": "downloads"
+      },
+      "failed_downloads": {
+        "name": "Failed downloads",
+        "unit_of_measurement": "downloads"
+      },
+      "total_downloads": {
+        "name": "Downloads in queue",
+        "unit_of_measurement": "downloads"
+      },
+      "upload_queue": {
+        "name": "Upload queue",
+        "unit_of_measurement": "clients"
+      },
+      "shared_files": {
+        "name": "Shared files",
+        "unit_of_measurement": "files"
+      },
+      "sources": {
+        "name": "Sources",
+        "unit_of_measurement": "sources"
+      },
+      "session_downloaded": {
+        "name": "Downloaded this session"
+      },
+      "session_uploaded": {
+        "name": "Uploaded this session"
+      },
+      "ed2k_status": {
+        "name": "eD2k status",
+        "state": {
+          "high_id": "High ID",
+          "low_id": "Low ID",
+          "connecting": "Connecting",
+          "disconnected": "Disconnected"
+        }
+      },
+      "kad_status": {
+        "name": "Kad status",
+        "state": {
+          "connected": "Connected",
+          "firewalled": "Firewalled",
+          "connecting": "Connecting",
+          "disconnected": "Disconnected"
+        }
+      },
+      "ed2k_server": {
+        "name": "eD2k server"
+      },
+      "ed2k_users": {
+        "name": "eD2k users",
+        "unit_of_measurement": "users"
+      },
+      "kad_users": {
+        "name": "Kad users",
+        "unit_of_measurement": "users"
+      },
+      "kad_nodes": {
+        "name": "Kad nodes",
+        "unit_of_measurement": "nodes"
+      }
+    },
+    "switch": {
+      "ed2k_network": {
+        "name": "eD2k network"
+      },
+      "kad_network": {
+        "name": "Kad network"
+      }
+    }
+  },
+  "services": {
+    "add_link": {
+      "name": "Add ed2k link",
+      "description": "Adds one or more ed2k:// links to the download queue.",
+      "fields": {
+        "link": {
+          "name": "Link",
+          "description": "One ed2k:// link, or several (a list, or one per line)."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "The aMule integration is not set up or not running."
+    },
+    "invalid_link": {
+      "message": "Not an ed2k link: \"{link}\""
+    },
+    "request_failed": {
+      "message": "The aMule app failed the request: {error}"
+    }
+  }
+}

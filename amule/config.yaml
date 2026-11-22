@@ -1,0 +1,59 @@
+name: aMule
+version: "1.0.0"
+slug: amule
+description: eD2k and Kad file sharing with aMule, a modern web UI and Home Assistant sensors.
+url: https://github.com/jmanera/ha-amule
+image: ghcr.io/jmanera/ha-amule
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: application
+boot: auto
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:download-network
+panel_title: aMule
+discovery:
+  - amule
+map:
+  - type: share
+    read_only: false
+  - type: media
+    read_only: false
+ports:
+  4662/tcp: 4662
+  4672/udp: 4672
+  4665/udp: 4665
+  4712/tcp: null
+ports_description:
+  4662/tcp: eD2k TCP port (forward it on your router for a high ID)
+  4672/udp: eD2k and Kad UDP port (forward it on your router)
+  4665/udp: eD2k global search UDP port
+  4712/tcp: Remote control for amulegui/amulecmd (needs remote_password)
+options:
+  download_dir: /share/amule/incoming
+  temp_dir: /share/amule/temp
+  share_dirs: []
+  nickname: ha-amule
+  max_download_kbps: 0
+  max_upload_kbps: 0
+  connect_ed2k: true
+  connect_kad: true
+  servers_url: http://upd.emule-security.org/server.met
+  nodes_url: http://upd.emule-security.org/nodes.dat
+  log_level: info
+schema:
+  download_dir: match(^/(media|share)/.+)
+  temp_dir: match(^/(media|share)/.+)
+  share_dirs:
+    - match(^/(media|share)/.+)
+  nickname: str
+  max_download_kbps: int(0,)
+  max_upload_kbps: int(0,)
+  connect_ed2k: bool
+  connect_kad: bool
+  servers_url: str
+  nodes_url: str
+  remote_password: password?
+  log_level: list(debug|info|warning|error)

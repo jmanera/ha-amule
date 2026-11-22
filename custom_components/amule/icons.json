@@ -1,0 +1,46 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "ed2k_connected": { "default": "mdi:server-network", "state": { "off": "mdi:server-network-off" } },
+      "kad_connected": { "default": "mdi:lan-connect", "state": { "off": "mdi:lan-disconnect" } },
+      "low_id": { "default": "mdi:shield-check", "state": { "on": "mdi:shield-alert" } }
+    },
+    "button": {
+      "pause_all": { "default": "mdi:pause-circle-outline" },
+      "resume_all": { "default": "mdi:play-circle-outline" },
+      "clear_completed": { "default": "mdi:playlist-remove" }
+    },
+    "number": {
+      "download_limit": { "default": "mdi:download-lock" },
+      "upload_limit": { "default": "mdi:upload-lock" }
+    },
+    "sensor": {
+      "download_speed": { "default": "mdi:download" },
+      "upload_speed": { "default": "mdi:upload" },
+      "active_downloads": { "default": "mdi:download-circle" },
+      "queued_downloads": { "default": "mdi:tray-full" },
+      "paused_downloads": { "default": "mdi:pause-circle" },
+      "completed_downloads": { "default": "mdi:check-circle-outline" },
+      "failed_downloads": { "default": "mdi:alert-circle-outline" },
+      "total_downloads": { "default": "mdi:format-list-bulleted" },
+      "upload_queue": { "default": "mdi:account-clock" },
+      "shared_files": { "default": "mdi:folder-network" },
+      "sources": { "default": "mdi:account-multiple" },
+      "session_downloaded": { "default": "mdi:download-network" },
+      "session_uploaded": { "default": "mdi:upload-network" },
+      "ed2k_status": { "default": "mdi:server-network" },
+      "kad_status": { "default": "mdi:lan" },
+      "ed2k_server": { "default": "mdi:server" },
+      "ed2k_users": { "default": "mdi:account-group" },
+      "kad_users": { "default": "mdi:account-group-outline" },
+      "kad_nodes": { "default": "mdi:graph" }
+    },
+    "switch": {
+      "ed2k_network": { "default": "mdi:server-network" },
+      "kad_network": { "default": "mdi:lan" }
+    }
+  },
+  "services": {
+    "add_link": { "service": "mdi:link-plus" }
+  }
+}

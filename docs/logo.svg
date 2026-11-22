@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b8ff0"/>
+      <stop offset="1" stop-color="#1a5fc4"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(20 36)">
+    <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+    <g stroke="#ffffff" stroke-opacity=".45" stroke-width="5" stroke-linecap="round">
+      <line x1="30" y1="34" x2="64" y2="52"/>
+      <line x1="98" y1="34" x2="64" y2="52"/>
+    </g>
+    <circle cx="30" cy="34" r="10" fill="#ffffff" fill-opacity=".85"/>
+    <circle cx="98" cy="34" r="10" fill="#ffffff" fill-opacity=".85"/>
+    <path d="M64 46v44M44 72l20 20 20-20" fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="34" y="100" width="60" height="9" rx="4.5" fill="#ffffff"/>
+  </g>
+  <text x="172" y="122" font-family="DejaVu Sans, Arial, sans-serif" font-size="78" font-weight="700" fill="#1a5fc4">aMule</text>
+  <text x="176" y="158" font-family="DejaVu Sans, Arial, sans-serif" font-size="24" fill="#5b6b7c">for Home Assistant</text>
+</svg>

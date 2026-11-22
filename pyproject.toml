@@ -1,0 +1,74 @@
+[project]
+name = "ha-amule"
+version = "1.0.0"
+description = "aMule (eD2k and Kad) for Home Assistant, with a modern web UI and sensors."
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Juan Manera" }]
+dependencies = [
+    "fastapi>=0.121",
+    "uvicorn>=0.38",
+    "httpx>=0.28",
+    "pydantic>=2.12",
+]
+
+[project.scripts]
+ha-amule = "ha_amule.__main__:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0",
+    "pytest-asyncio>=1.3",
+    "pytest-cov>=7.0",
+    "respx>=0.22",
+    "ruff>=0.14",
+    "mypy>=1.18",
+    "bandit>=1.9",
+    "pip-audit>=2.9",
+    "pre-commit>=4.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ha_amule"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "ASYNC", "PL", "RUF"]
+ignore = ["PLR0913", "PLR0915", "PLR2004", "PLC0415", "PLR0911"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "PLR2004"]
+"integration_tests/**" = ["S101", "S105", "S106", "PLR2004"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ha_amule", "custom_components"]
+
+[tool.mypy]
+strict = true
+python_version = "3.13"
+mypy_path = "src"
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.coverage.run]
+source = ["ha_amule"]
+branch = true
+omit = ["*/__main__.py"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_covered = true

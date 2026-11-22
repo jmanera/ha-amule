@@ -1,0 +1,8 @@
+add_link:
+  fields:
+    link:
+      required: true
+      example: "ed2k://|file|debian-13.2.0-amd64-netinst.iso|790626304|0123456789ABCDEF0123456789ABCDEF|/"
+      selector:
+        text:
+          multiline: true
